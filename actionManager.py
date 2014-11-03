@@ -1,7 +1,8 @@
 import sys
 import curses
+from inventoryManager import *
 
-def actionManagerKey(key, playerPosX, playerPosY, currentMap):
+def actionManagerKey(key, playerPosX, playerPosY, currentMap, inventory):
     if key in [ord('q'), ord('Q')]:
         sys.quit()
     if key == curses.KEY_LEFT:
@@ -14,13 +15,14 @@ def actionManagerKey(key, playerPosX, playerPosY, currentMap):
         playerPosY = playerPosY + 1
 
     elif key == ord('c') and currentMap[playerPosX][playerPosY] == "tree":
-        actionManagerAction.chopDownTree()
+        currentMap[playerPosX][playerPosY] = "grass"
+        inventory.append("logs")
 
     elif key == ord('f') and currentMap[playerPosX][playerPosY] == "grass" and itemPresentInInventory("logs", inventory):
         currentMap[playerPosX][playerPosY] = "fire"
         inventory = removeItemFromInventory("logs", inventory)
 
-    return playerPosX, playerPosY
+    return playerPosX, playerPosY, currentMap, inventory
 
 def actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, screen):
     descriptionBoxX = mapSizeX + int(mapSizeX/10)
@@ -29,12 +31,6 @@ def actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, 
     screen.addstr(0, descriptionBoxX, ("(" + str(mapSizeX) + ", " + str(mapSizeY) + ")"))
     screen.addstr(1, descriptionBoxX, ("(" + str(playerPosX) + ", " + str(playerPosY) + ")"))
     screen.addstr(2, descriptionBoxX, (description))
-    return currentMap
-
-def actionManagerDescription():
     if currentMap[playerPosX][playerPosY] == "tree":
         screen.addstr(3, descriptionBoxX, ("Press 'c' to chop down tree"), curses.color_pair(3))
-
-def chopDownTree():
-    currentMap[playerPosX][playerPosY] = "grass"
-    inventory.append("logs")
+    return currentMap

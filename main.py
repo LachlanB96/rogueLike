@@ -1,6 +1,6 @@
 import curses
 import random
-from inventory import *
+from inventoryManager import *
 from mapManager import *
 from actionManager import *
 
@@ -62,7 +62,7 @@ def main(screen):
         currentMap = actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, screen)
         inventoryManager(inventory, screen, inventoryPosY)
         key = screen.getch()
-        playerPosX, playerPosY = actionManagerKey(key, playerPosX, playerPosY, currentMap)
+        playerPosX, playerPosY, currentMap, inventory = actionManagerKey(key, playerPosX, playerPosY, currentMap, inventory)
 
         playerPosX = max(0,  playerPosX)
         playerPosX = min(screenSizeX-1, playerPosX)
