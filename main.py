@@ -3,6 +3,7 @@ import random
 from inventoryManager import *
 from mapManager import *
 from actionManager import *
+from skillManager import *
 
 def mapGenerate(mapSizeX, mapSizeY, trees=5, towns=1, shops=2, monsters=4):
     matrix = [[0 for i in range(mapSizeY)] for i in range(mapSizeX)]
@@ -42,12 +43,15 @@ def main(screen):
     mapSizeX = int(screenSizeX/2)
     mapSizeY = screenSizeY - int(screenSizeY/2)
     inventoryPosY = mapSizeY + int(mapSizeY/10)
+    skillManagerDisplayX = mapSizeX + int(mapSizeX/10)
+    skillManagerDisplayY = inventoryPosY
     playerPosX = int(mapSizeX/2)
     playerPosY = int(mapSizeY/2)
     ax = 0
     ay = 0
     currentMap = mapGenerate(mapSizeX, mapSizeY)
     inventory = []
+    skills = {'attack': 100}
 
     while True:
         screen.clear()
@@ -60,9 +64,10 @@ def main(screen):
                 elif currentMap[j][i] == "fire": screen.addstr(i, j, 'F', curses.color_pair(13))
                 else: screen.addstr(i, j, ',')
         currentMap = actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, screen)
+        skillManagerDisplay(screen, skillManagerDisplayX, skillManagerDisplayY, skills)
         inventoryManager(inventory, screen, inventoryPosY)
         key = screen.getch()
-        playerPosX, playerPosY, currentMap, inventory = actionManagerKey(key, playerPosX, playerPosY, currentMap, inventory)
+        playerPosX, playerPosY, currentMap, inventory, skills = actionManagerKey(key, playerPosX, playerPosY, currentMap, inventory, skills)
 
         playerPosX = max(0,  playerPosX)
         playerPosX = min(screenSizeX-1, playerPosX)
