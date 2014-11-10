@@ -2,11 +2,13 @@ import curses
 from screenManager import *
 
 def inventoryManager(inventory, screen, inventoryPosY):
-    titlePosY, titlePosX = screenPositioner(3, "title")
+    moduleNumber = 3
+    titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
+    bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
     screen.addstr(titlePosY, titlePosX, 'INVENTORY', curses.color_pair(13))
-    i = 2 #counter for list items
+    i = 0 #counter for list items
     for item in set(inventory):
-        screen.addstr(inventoryPosY + i, 0, (str(inventory.count(item)) + " x " + item))
+        screen.addstr(bodyPosY + i, bodyPosX, (str(inventory.count(item)) + " x " + item))
         i += 1
 
 def itemPresentInInventory(item, inventory):

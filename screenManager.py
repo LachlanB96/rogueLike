@@ -26,9 +26,11 @@ def screenBorders(screen):
 def screenPositioner(moduleNumber, component):
     if moduleNumber == 1:
         if component == "title":
-            return 1, 4
+            return 1, 3
         elif component == "body":
-            return 3, 2
+            return 3, 1
+        elif component == "bodyCentre":
+            return 3
     elif moduleNumber == 2:
         if component == "title":
             return 1, int(int(os.environ['COLS'])/2) + 3
@@ -46,4 +48,4 @@ def screenPositioner(moduleNumber, component):
             return int(int(os.environ['LINES'])/2+3), int(int(os.environ['COLS'])/2) + 1
 
 def moduleSize():
-    return int(int(os.environ['COLS'])/2)-2, int(int(os.environ['LINES'])/2)-3
+    return int(int(os.environ['COLS'])/2)-1, int(int(os.environ['LINES'])/2)-3

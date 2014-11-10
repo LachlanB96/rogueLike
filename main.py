@@ -21,29 +21,30 @@ def main(screen):
     descriptionBoxX = mapSizeX + int(mapSizeX/10)
     skillManagerDisplayX = descriptionBoxX
     skillManagerDisplayY = inventoryPosY
-    playerPosX = 10
-    playerPosY = 10
+    playerPosX = 500
+    playerPosY = 500
     ax = 0
     ay = 0
     currentMap = mapGenerate(mapSizeX, mapSizeY)
     inventory = []
     skills = {}
+    shop = {'logs':2}
 
     while True:
         screen.clear()
+        screenBorders(screen)
         mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY)
         currentMap = actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, screen)
         skillManagerDisplay(screen, skills)
         inventoryManager(inventory, screen, inventoryPosY)
-        screenBorders(screen)
         key = screen.getch()
-        playerPosX, playerPosY, currentMap, inventory, skills = actionManagerKey(descriptionBoxX, key, 
-            playerPosX, playerPosY, currentMap, inventory, skills, screen, inventoryPosY)
+        playerPosX, playerPosY, currentMap, inventory, skills = actionManagerKey(key, 
+            playerPosX, playerPosY, currentMap, inventory, skills, screen)
 
-        playerPosX = max(0,  playerPosX)
-        playerPosX = min(screenSizeX-1, playerPosX)
-        playerPosY = max(0,  playerPosY)
-        playerPosY = min(screenSizeY-1, playerPosY)
+        #playerPosX = max(0,  playerPosX)
+        #playerPosX = min(screenSizeX-1, playerPosX)
+        #playerPosY = max(0,  playerPosY)
+        #playerPosY = min(screenSizeY-1, playerPosY)
 
 
 if __name__ == '__main__':

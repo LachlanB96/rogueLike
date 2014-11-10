@@ -6,7 +6,7 @@ def skillManagerDisplay(screen, skills):
     titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
     bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
     screen.addstr(titlePosY, titlePosX, 'SKILLS', curses.color_pair(13))
-    skillCounter = 1
+    skillCounter = 0
     for skill in skills:
         screen.addstr(bodyPosY + skillCounter, bodyPosX, (skill + " | " + skillManagerExperienceBar(skills[skill])), curses.color_pair(13))
         skillCounter += 1

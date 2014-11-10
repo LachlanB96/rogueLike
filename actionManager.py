@@ -4,7 +4,7 @@ from inventoryManager import *
 from shopManager import *
 from skillManager import *
 
-def actionManagerKey(bodyPosX, key, playerPosX, playerPosY, currentMap, inventory, skills, screen, inventoryPosY):
+def actionManagerKey(key, playerPosX, playerPosY, currentMap, inventory, skills, screen):
     if key in [ord('q'), ord('Q')]:
         sys.quit()
     if key == curses.KEY_LEFT:
@@ -27,10 +27,11 @@ def actionManagerKey(bodyPosX, key, playerPosX, playerPosY, currentMap, inventor
         skills = skillManagerExperience(skills, 'attack', 10)
 
     elif key == ord('s') and currentMap[playerPosX][playerPosY] == "shop":
-        shopManagerWelcome(inventory, screen, bodyPosX, inventoryPosY)
+        shopManagerWelcome(inventory, screen)
 
     elif key == ord('f') and currentMap[playerPosX][playerPosY] == "water" and itemPresentInInventory("fishingRod", inventory):
         inventory.append("fish")
+        inventory = removeItemFromInventory("fishingRod", inventory, 1)
         skills = skillManagerExperience(skills, 'fishing', 8)
 
     elif key == ord('f') and currentMap[playerPosX][playerPosY] == "grass" and itemPresentInInventory("logs", inventory):
@@ -43,19 +44,26 @@ def actionManagerKey(bodyPosX, key, playerPosX, playerPosY, currentMap, inventor
 def actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, screen):
     moduleNumber = 2
     titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
-    screen.addstr(titlePosY, titlePosX, 'ACTIONS', curses.color_pair(13))
     bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
+    screen.addstr(titlePosY, titlePosX, 'ACTIONS', curses.color_pair(13))
     description = currentMap[playerPosX][playerPosY]
-    screen.addch(playerPosY, playerPosX, '@', curses.color_pair(12))
     screen.addstr(bodyPosY, bodyPosX, ("(" + str(mapSizeX) + ", " + str(mapSizeY) + ")"))
     screen.addstr(bodyPosY + 1, bodyPosX, ("(" + str(playerPosX) + ", " + str(playerPosY) + ")"))
     screen.addstr(bodyPosY + 2, bodyPosX, (description))
-    if currentMap[playerPosX][playerPosY] == "tree":
-        screen.addstr(3, bodyPosX, ("Press 'c' to chop down tree"), curses.color_pair(3))
-    elif currentMap[playerPosX][playerPosY] == "monster":
-        screen.addstr(3, bodyPosX, ("Press 'a' to attack monster"), curses.color_pair(5))
-    elif currentMap[playerPosX][playerPosY] == "shop":
-        screen.addstr(3, bodyPosX, ("Press 's' to buy and sell goods"), curses.color_pair(15))
-    elif currentMap[playerPosX][playerPosY] == "water":
-        screen.addstr(3, bodyPosX, ("Press 'f' to fish"), curses.color_pair(2))
+    currentTile = currentMap[playerPosX][playerPosY]
+    actionDescriptions = {'grass':("Press 'p' to plant seed", 'p', 16), 
+        'tree':("Press 'c' to chop down tree", 'c', 3),
+        'town':("Press 'e' to enter town", 'e', 14), 
+        'shop':("Press 's' to enter shop", 's', 15),
+        'monster':("Press 'a' to attack monster", 'a', 5), 
+        'water':("Press 'f' to fish the water", 'f', 2),
+        'fire':("Press 'f' to start fire", 'f', 13), 
+        'mountain':("Press 'e' to explore mountain", 'e', 16),
+        'mine':("Press 'm' to mine ore", 'm', 7), 
+        'craftShop':("Press 'c' to enter shop", 'c', 4),
+        'quest':("Press 'q' to complete quest", 'q', 15), 
+        'alter':("Press 'p' to pray", 'p', 2),
+        }
+    if currentTile in actionDescriptions:
+        screen.addstr(bodyPosY, bodyPosX, actionDescriptions[currentTile][0], curses.color_pair(actionDescriptions[currentTile][2]))
     return currentMap
