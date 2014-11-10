@@ -1,8 +1,15 @@
 import curses
+from screenManager import *
 
-def skillManagerDisplay(screen, skillManagerDisplayX, skillManagerDisplayY, skills):
-    screen.addstr(skillManagerDisplayY, skillManagerDisplayX, 'SKILLS', curses.color_pair(10))
-    screen.addstr(skillManagerDisplayY + 1, skillManagerDisplayX, ("attack | " + skillManagerExperienceBar(skills['attack'])), curses.color_pair(13))
+def skillManagerDisplay(screen, skills):
+    moduleNumber = 4
+    titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
+    bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
+    screen.addstr(titlePosY, titlePosX, 'SKILLS', curses.color_pair(13))
+    skillCounter = 1
+    for skill in skills:
+        screen.addstr(bodyPosY + skillCounter, bodyPosX, (skill + " | " + skillManagerExperienceBar(skills[skill])), curses.color_pair(13))
+        skillCounter += 1
 
 #class Skill(name, colour)
 
@@ -23,6 +30,13 @@ def skillManagerExperienceBar(skill):
         else:
             percentageBar += "-"
     return (str(level) + " |" + str(percentageBar) + "|")
+
+def skillManagerExperience(skills, skill, experienceEarned):
+    if not skill in skills:
+        skills[skill] = experienceEarned
+    else:
+        skills[skill] += experienceEarned
+    return skills
 
 
     #10:1,30:2,70:3,150:4
