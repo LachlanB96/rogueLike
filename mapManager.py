@@ -57,3 +57,31 @@ def drawMapTile(currentTile, tilePosY, tilePosX, screen):
     tileTypes = {'grass':',','tree':'t','town':'T','shop':'$','monster':'M','water':'W','fire':'F','mountain':'M','mine':'m','craftShop':'C','quest':'!','alter':'A'} 
     tileColours = {'grass':16,'tree':3,'town':14,'shop':15,'monster':5,'water':2,'fire':13,'mountain':16,'mine':7,'craftShop':4,'quest':15,'alter':2}
     screen.addstr(tilePosY, tilePosX, tileTypes[currentTile], curses.color_pair(tileColours[currentTile]))
+
+def mapEvents(currentMap, playerPosX, playerPosY):
+    moduleSizeX, moduleSizeY = moduleSize()
+    for i in range(moduleSizeY):
+        for j in range (moduleSizeX):
+            currentTile = currentMap[j + playerPosX - int(moduleSizeX/2)][i + playerPosY - int(moduleSizeY/2)]
+            if currentTile == 'tree':
+                if tileNextTo(currentMap, i, j, 'fire'):
+                    currentMap[i][j] = 'fire'
+            elif currentTile == 'seed':
+                if random.randint(1,10) == 1:
+                    currentMap[i][j] == 'tree'
+    return currentMap
+
+def tileNextTo(currentMap, tilePositionX, tilePositionY, tileToFind, direction="none"):
+    try:
+        if direction == 'none':
+            if tileToFind == currentMap[tilePositionX+1][tilePositionY]:
+                return True
+            elif tileToFind == currentMap[tilePositionX][tilePositionY+1]:
+                return True
+            elif tileToFind == currentMap[tilePositionX-1][tilePositionY]:
+                return True
+            elif tileToFind == currentMap[tilePositionX][tilePositionY-1]:
+                return True
+        pass
+    except IndexError:
+        i = 1 # this does nothing...

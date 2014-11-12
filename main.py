@@ -29,17 +29,30 @@ def main(screen):
     inventory = []
     skills = {}
     shop = {'logs':2}
+    actionDescriptions = {'grass':("Press 'p' to plant seed", 'p', 16), 
+        'tree':("Press 'c' to chop down tree", 'c', 3),
+        'town':("Press 'e' to enter town", 'e', 14), 
+        'shop':("Press 's' to enter shop", 's', 15),
+        'monster':("Press 'a' to attack monster", 'a', 5), 
+        'water':("Press 'f' to fish the water", 'f', 2),
+        'fire':("Press 'f' to start fire", 'f', 13), 
+        'mountain':("Press 'e' to explore mountain", 'e', 16),
+        'mine':("Press 'm' to mine ore", 'm', 7), 
+        'craftShop':("Press 'c' to enter shop", 'c', 4),
+        'quest':("Press 'q' to complete quest", 'q', 15), 
+        'alter':("Press 'p' to pray", 'p', 2),
+        }
 
     while True:
         screen.clear()
         screenBorders(screen)
         mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY)
-        currentMap = actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, screen)
+        currentMap = actionManagerAction(currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, screen, actionDescriptions)
         skillManagerDisplay(screen, skills)
         inventoryManager(inventory, screen, inventoryPosY)
         key = screen.getch()
         playerPosX, playerPosY, currentMap, inventory, skills = actionManagerKey(key, 
-            playerPosX, playerPosY, currentMap, inventory, skills, screen)
+            playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY)
 
         #playerPosX = max(0,  playerPosX)
         #playerPosX = min(screenSizeX-1, playerPosX)
