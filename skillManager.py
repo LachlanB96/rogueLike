@@ -1,15 +1,15 @@
 import curses
 from screenManager import *
 
-def skillManagerDisplay(screen, skills):
-    moduleNumber = 4
-    titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
-    bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
-    screen.addstr(titlePosY, titlePosX, 'SKILLS', curses.color_pair(13))
-    skillCounter = 0
-    for skill in skills:
-        screen.addstr(bodyPosY + skillCounter, bodyPosX, (skill + " | " + skillManagerExperienceBar(skills[skill])), curses.color_pair(13))
-        skillCounter += 1
+def skillManagerDisplay(screen, skills, moduleNumber):
+    if not moduleNumber == 5:
+        titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
+        bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
+        screen.addstr(titlePosY, titlePosX, 'SKILLS', curses.color_pair(13))
+        skillCounter = 0
+        for skill in skills:
+            screen.addstr(bodyPosY + skillCounter, bodyPosX, (skill + " | " + skillManagerExperienceBar(skills[skill])), curses.color_pair(13))
+            skillCounter += 1
 
 #class Skill(name, colour)
 

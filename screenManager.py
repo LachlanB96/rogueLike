@@ -49,3 +49,39 @@ def screenPositioner(moduleNumber, component):
 
 def moduleSize():
     return int(int(os.environ['COLS'])/2)-1, int(int(os.environ['LINES'])/2)-3
+
+def moduleReposition(key, modulePositions, screen):
+    if key == ord('1'):
+        module = 1
+    elif key == ord('2'):
+        module = 2
+    elif key == ord('3'):
+        module = 3
+    elif key == ord('4'):
+        module = 4
+    chosingOption = True
+    while chosingOption:
+        option = screen.getch()
+        if option == ord('m'):
+            #http://stackoverflow.com/a/13149770
+            modulePositions[list(modulePositions.keys())[list(modulePositions.values()).index(module)]] = modulePositions['map']
+            modulePositions['map'] = module
+            chosingOption = False
+        elif option == ord('a'):
+            modulePositions[list(modulePositions.keys())[list(modulePositions.values()).index(module)]] = modulePositions['actions']
+            modulePositions['actions'] = module
+            chosingOption = False
+        elif option == ord('i'):
+            modulePositions[list(modulePositions.keys())[list(modulePositions.values()).index(module)]] = modulePositions['inventory']
+            modulePositions['inventory'] = module
+            chosingOption = False
+        elif option == ord('s'):
+            modulePositions[list(modulePositions.keys())[list(modulePositions.values()).index(module)]] = modulePositions['skills']
+            modulePositions['skills'] = module
+            chosingOption = False
+        elif option == ord('q'):
+            modulePositions[list(modulePositions.keys())[list(modulePositions.values()).index(module)]] = modulePositions['quests']
+            modulePositions['quests'] = module
+            chosingOption = False
+
+    return modulePositions
