@@ -28,8 +28,9 @@ def main(screen):
     ay = 0
     currentMap = mapGenerate(mapSizeX, mapSizeY)
     modulePositions = {'map':1,'actions':2,'inventory':3,'skills':4, 'quests':5}
-    inventory = ['axe', 'shovel']
+    inventory = ['axe', 'shovel', 'bucket']
     skills = {}
+    prayerPoints = 0
     #quest tuple is (<townCoord>,<questCoord>,<questType>,<rewardType>,<reward>)
     activeQuests = []
     shop = {'logs':2}
@@ -56,7 +57,7 @@ def main(screen):
         inventoryManager(inventory, screen, inventoryPosY, modulePositions['inventory'])
         questManagerDisplay(screen, activeQuests, modulePositions['quests'])
         actionManagerDisplay(screen, modulePositions['actions'], textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY)
-        playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay = actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay)
+        playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints = actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints)
 
         #playerPosX = max(0,  playerPosX)
         #playerPosX = min(screenSizeX-1, playerPosX)

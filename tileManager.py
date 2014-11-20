@@ -1,0 +1,4 @@
+class Town(posX, posY):
+    def __init__:
+        townNames = ["Sadberge", "St Albans", "St Briavels", "St Germans", "St Giles", "St Mawes", "St Olave's Borough (York)", "Salford", "Salisbury", "Saltash (alias Ash)", "Sampford Peverell", "Sandwich", "Scarborough", "Seaford", "Seasalter", "Shaftesbury", "Sheepwash", "Sheffield", "Sherborne Newland", "Sherston", "Shifnal", "Shoreham", "Shrewsbury", "idmouth", "Silverton", "Skelton", "Skinburness", "Skipsea", "Skipton", "Solihull", "Somerton", "South Molton", "South Zeal", "Southam", "Southampton", "outhwark", "outhwold", "Stafford", "tamford", "tandon", "Stansted Abbots", "Stapleton", "Steyning", "Stoborough", "Stockbridge", "Stockport", "Stockton", "Stoford", "Stogursey", "Stokesley", "Stone", "Stottesdon", "Stow-on-the-wold", "Stratford on Avon", "Sudbury", "Sunderland", "Sutton Prior", "Swavese"]
+        self.townName = townNames[random.randint(0,len(townNames))]

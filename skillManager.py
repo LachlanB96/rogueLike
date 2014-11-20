@@ -38,5 +38,11 @@ def skillManagerExperience(skills, skill, experienceEarned):
         skills[skill] += experienceEarned
     return skills
 
-
+def skillManagerLevel(skill):
+    level = 1
+    while skill - 10*2**(level - 1) > 0:
+        skill -= 10*2**(level - 1)
+        level +=1
+    level -= 1
+    return level
     #10:1,30:2,70:3,150:4
