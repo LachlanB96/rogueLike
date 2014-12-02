@@ -1,0 +1,22 @@
+TODO:
+- Add day night cycles
+- Add more depth to monsters
+    - Train
+    - Hide
+    - Flee
+    - Attack
+    - Defend
+- Add Rivers
+- Add Ruins
+- Add caves
+- Add potions
+- Fix actionManager class, it handles too much
+- Add deserts
+- Add armour and armour manager (swords too!)
+- Add health and mana to actions tab?
+- Add intellegent other players
+- Make map generate as it goes, instead of all at start of game
+- Add help menu
+- Clean up UI so more user friendly
+- Add bandit camps
+- Add more biomes

@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"pos",
+				"positionY"
+			],
+			[
+				"tile",
+				"tileToFind"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"maps",
+				"mapSizeY"
+			],
+			[
+				"current",
+				"currentMap"
+			],
+			[
 				"player",
 				"playerPosY"
 			],
@@ -50,10 +70,6 @@
 			[
 				"plas",
 				"playerPosY"
-			],
-			[
-				"current",
-				"currentTile"
 			],
 			[
 				"module",
@@ -146,10 +162,6 @@
 			[
 				"inv",
 				"inventoryPosY"
-			],
-			[
-				"tile",
-				"tileType"
 			],
 			[
 				"mons",
@@ -311,7 +323,7 @@
 			"file": "main.py",
 			"settings":
 			{
-				"buffer_size": 2910,
+				"buffer_size": 2932,
 				"line_ending": "Windows"
 			}
 		},
@@ -320,15 +332,6 @@
 			{
 				"buffer_size": 0,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "monsterManager.py",
-			"settings":
-			{
-				"buffer_size": 76,
-				"line_ending": "Windows",
-				"name": "class Monster(level, gold):"
 			}
 		},
 		{
@@ -341,23 +344,12 @@
 			}
 		},
 		{
-			"contents": "import sys\nimport curses\nimport random\nfrom inventoryManager import *\nfrom shopManager import *\nfrom skillManager import *\nfrom mapManager import *\nfrom screenManager import *\nfrom questManager import *\n\ndef actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints):\n    textToDisplay = []\n    key = screen.getch()\n    if key == ord('Q'):\n        sys.quit()\n    if key == curses.KEY_LEFT:\n        playerPosX = playerPosX - 1\n        currentMap = mapEvents(currentMap, playerPosX, playerPosY)\n    elif key == curses.KEY_RIGHT:\n        playerPosX = playerPosX + 1\n        currentMap = mapEvents(currentMap, playerPosX, playerPosY)\n    elif key == curses.KEY_UP:\n        playerPosY = playerPosY - 1\n        currentMap = mapEvents(currentMap, playerPosX, playerPosY)\n    elif key == curses.KEY_DOWN:\n        playerPosY = playerPosY + 1\n        currentMap = mapEvents(currentMap, playerPosX, playerPosY)\n\n    elif key == ord('1') or key == ord('2') or key == ord('3') or key == ord('4'):\n        modulePositions = moduleReposition(key, modulePositions, screen)\n\n    elif key == ord('w'):\n        currentMap = mapEvents(currentMap, playerPosX, playerPosY)\n\n\n\n    if currentMap[playerPosX][playerPosY] == \"grass\":\n        if itemPresentInInventory(\"seeds\", inventory):\n            if tileNextTo(currentMap, playerPosX, playerPosY, 'water', \"none\", 3):\n                textToDisplay.append((\"Press 'p' to plant seed\" , 16))\n                if key == ord('p'):\n                    currentMap[playerPosX][playerPosY] = \"seed\"\n                    skills = skillManagerExperience(skills, 'farming', 23)\n        if itemPresentInInventory(\"shovel\", inventory):\n            textToDisplay.append((\"Press 'd' to dig a hole\" , 16))\n            if key == ord('d'):\n                if random.randint(1, 5) == 1:\n                    inventory.append(\"bones\")\n                currentMap[playerPosX][playerPosY] = \"hole\"\n                inventory.append(\"dirt\")\n                skills = skillManagerExperience(skills, 'strength', 2)\n                skills = skillManagerExperience(skills, 'terraforming', 10)\n            if 'terraforming' in skills:\n                if skillManagerLevel(skills['terraforming']) > 4:\n                    textToDisplay.append((\"Press 'b' to dig a big hole\" , 16))\n                    if key == ord('b'):\n                        currentMap = changeTile(currentMap, playerPosX, playerPosY, \"hole\", 2)\n                        inventory.append(\"dirt\")\n                        skills = skillManagerExperience(skills, 'strength', 2)\n                        skills = skillManagerExperience(skills, 'terraforming', 40)\n        if itemPresentInInventory(\"logs\", inventory):\n            textToDisplay.append((\"Press 'f' to start a fire\" , 3))\n            if key == ord('f'):\n                currentMap[playerPosX][playerPosY] = \"fire\"\n                inventory = removeItemFromInventory(\"logs\", inventory, 1)\n                skills = skillManagerExperience(skills, 'firemaking', 10)\n        if itemPresentInInventory(\"bones\", inventory):\n            textToDisplay.append((\"Press 'b' to bury bones\", 3))\n            if key == ord('b'):\n                skills = skillManagerExperience(skills, 'praying', 8)\n                prayerPoints += 10\n\n    elif currentMap[playerPosX][playerPosY] == \"seed\":\n        textToDisplay.append((\"Press 't' to trample seed\", 3))\n        if key == ord('t'):\n            currentMap[playerPosX][playerPosY] = \"grass\"\n        if itemPresentInInventory(\"corrupt dust\", inventory):\n            textToDisplay.append((\"Press 'p' to add corrupt dust to tree\", 3))\n            if key == ord('p'):\n                currentMap[playerPosX][playerPosY] = \"evilSeed\"\n\n    elif currentMap[playerPosX][playerPosY] == \"tree\":\n        if itemPresentInInventory(\"axe\", inventory):\n            textToDisplay.append((\"Press 'c' to chop down tree\", 3))\n            if key == ord('c'):\n                if random.randint(1, 2) == 1:\n                    inventory.append(\"seeds\")\n                currentMap[playerPosX][playerPosY] = \"grass\"\n                inventory.append(\"logs\")\n                skills = skillManagerExperience(skills, 'woodcutting', 10)\n\n    elif currentMap[playerPosX][playerPosY] == \"town\":\n        textToDisplay.append((\"Press 't' to talk\", 16))\n        textToDisplay.append((\"Press 'q' to start a quest\", 15))\n        if key == ord('q'):\n            currentMap, activeQuests = questManagerNew(currentMap, activeQuests, playerPosX, playerPosY)\n            skillManagerExperience(skills, 'questing', -25)\n        for quest in activeQuests:\n            if quest[2] == \"return\" and quest[0] == str(playerPosX) + \",\" + str(playerPosY):\n                textToDisplay.append((\"Press 'c' to complete quest\", 15))\n                if key == ord('c'):\n                    for i in range(0,int(quest[4])):\n                        inventory.append(quest[3])\n                    activeQuests.remove(quest)\n                    skillManagerExperience(skills, 'questing', 50)\n\n    elif currentMap[playerPosX][playerPosY] == \"shop\":\n        textToDisplay.append((\"Press 's' to shop\", 3))\n        textToDisplay.append((\"Press 'r' to rob shop\", 3))\n        textToDisplay.append((\"Press 'i' to invest in shop\", 3))\n        if key == ord('s'):\n            shopManagerManager(inventory, screen)\n\n    elif currentMap[playerPosX][playerPosY] == \"monster\":\n        textToDisplay.append((\"Press 'a' to attack monster\", 3))\n        textToDisplay.append((\"Press 't' to train monster\", 3))\n        textToDisplay.append((\"Press 'f' to flee monster\", 3))\n        textToDisplay.append((\"Press 'd' to defend against monster\", 3))\n        textToDisplay.append((\"Press 'h' to hide from monster\", 3))\n        if key == ord('a'):\n            if random.randint(1, 15) == 1:\n                    inventory.append(\"corrupt dust\")\n            inventory.append(\"gold\")\n            currentMap[playerPosX][playerPosY] = \"grass\"\n            skills = skillManagerExperience(skills, 'attack', 10)\n\n    elif currentMap[playerPosX][playerPosY] == \"quest\":\n        for quest in activeQuests:\n            if quest[1] == str(playerPosX) + \",\" + str(playerPosY):\n                if key == ord('q'):\n                    updatedQuest = (quest[0],quest[1],\"return\",quest[3],quest[4])\n                    activeQuests.remove(quest)\n                    activeQuests.append(updatedQuest)\n                    currentMap[playerPosX][playerPosY] = \"grass\"\n\n    elif currentMap[playerPosX][playerPosY] == \"water\":\n        if itemPresentInInventory(\"fishingRod\", inventory):\n            textToDisplay.append((\"Press 'f' to fish water\", 15))\n            if key == ord('f'):\n                inventory.append(\"fish\")\n                inventory = removeItemFromInventory(\"fishingRod\", inventory, 1)\n                skills = skillManagerExperience(skills, 'fishing', 8)\n        elif itemPresentInInventory(\"bucket\", inventory):\n            textToDisplay.append((\"Press 'p' to pickup water\", 15))\n            if key == ord('p'):\n                inventory.append(\"water bucket\")\n                inventory = removeItemFromInventory(\"bucket\", inventory, 1)\n                currentMap[playerPosX][playerPosY] = \"hole\"\n\n    elif currentMap[playerPosX][playerPosY] == \"hole\":\n        if itemPresentInInventory(\"water bucket\", inventory):\n            textToDisplay.append((\"Press 'p' to put down water\", 15))\n            if key == ord('p'):\n                inventory.append(\"bucket\")\n                inventory = removeItemFromInventory(\"water bucket\", inventory, 1)\n                currentMap[playerPosX][playerPosY] = \"water\"\n\n    elif currentMap[playerPosX][playerPosY] == \"alter\":\n        if prayerPoints > 15:\n            textToDisplay.append((\"Press 'w' to pray to the god of staff\", 3))\n            textToDisplay.append((\"Press 's' to pray to the god of sword\", 5))\n            textToDisplay.append((\"Press 'x' to pray to the god of arrow\", 10))\n            if key == ord('w'):\n                prayerPoints -= 15\n                inventory.append(\"staff\")\n            elif key == ord('s'):\n                prayerPoints -= 15\n                inventory.append(\"sword\")\n            elif key == ord('x'):\n                prayerPoints -= 15\n                inventory.append(\"bow\")\n                for i in range(10):\n                    inventory.append(\"arrows\")\n\n\n    return playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints\n\ndef actionManagerDisplay(screen, moduleNumber, textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY):\n    if not moduleNumber == 5:\n        titlePosY, titlePosX = screenPositioner(moduleNumber, \"title\")\n        bodyPosY, bodyPosX = screenPositioner(moduleNumber, \"body\")\n        screen.addstr(titlePosY, titlePosX, 'ACTIONS', curses.color_pair(13))\n        description = currentMap[playerPosX][playerPosY]\n        screen.addstr(bodyPosY, bodyPosX, (\"(\" + str(mapSizeX) + \", \" + str(mapSizeY) + \")\"))\n        screen.addstr(bodyPosY + 1, bodyPosX, (\"(\" + str(playerPosX) + \", \" + str(playerPosY) + \")\"))\n        screen.addstr(bodyPosY + 2, bodyPosX, (description))\n        i = 0\n        for line in textToDisplay:\n            screen.addstr(bodyPosY + 3 + i, bodyPosX, line[0], curses.color_pair(line[1]))\n            i += 1",
 			"file": "actionManager.py",
-			"file_size": 9588,
-			"file_write_time": 130607483910897513,
 			"settings":
 			{
-				"buffer_size": 9397,
+				"buffer_size": 9763,
 				"line_ending": "Windows",
 				"name": "def actionManagerKey(key):"
-			}
-		},
-		{
-			"file": "testing.py",
-			"settings":
-			{
-				"buffer_size": 247,
-				"line_ending": "Windows"
 			}
 		},
 		{
@@ -381,8 +373,25 @@
 			"file": "screenManager.py",
 			"settings":
 			{
-				"buffer_size": 3361,
+				"buffer_size": 3486,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "mapManager.py",
+			"settings":
+			{
+				"buffer_size": 8805,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "monsterManager.py",
+			"settings":
+			{
+				"buffer_size": 668,
+				"line_ending": "Windows",
+				"name": "class Monster(level, gold):"
 			}
 		},
 		{
@@ -394,20 +403,23 @@
 			}
 		},
 		{
-			"file": "mapManager.py",
-			"settings":
-			{
-				"buffer_size": 7878,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "tileManager.py",
 			"settings":
 			{
 				"buffer_size": 927,
 				"line_ending": "Windows",
 				"name": "class Town(posX, posY):"
+			}
+		},
+		{
+			"contents": "import random\n\nfor i in range(20):\n\n    print (name)",
+			"file": "testing.py",
+			"file_size": 532,
+			"file_write_time": 130619175452207794,
+			"settings":
+			{
+				"buffer_size": 52,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -538,6 +550,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"bridge",
+			"try",
+			"tr",
+			"try",
 			",",
 			"tilePosition",
 			"descriptionBoxX",
@@ -574,6 +590,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"alter",
 			"bodyPosX",
 			"map",
 			"screen",
@@ -589,7 +606,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -598,15 +615,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2910,
+						"buffer_size": 2932,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								684,
-								684
+								745,
+								745
 							]
 						],
 						"settings":
@@ -619,7 +636,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -646,40 +663,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "monsterManager.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 76,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								76,
-								76
-							]
-						],
-						"settings":
-						{
-							"auto_name": "class Monster(level, gold):",
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "skillManager.py",
 					"semi_transient": false,
 					"settings":
@@ -698,70 +686,9 @@
 						"settings":
 						{
 							"auto_name": "class Skill(name, colour)",
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
-				{
-					"buffer": 4,
-					"file": "actionManager.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9397,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4279,
-								4279
-							]
-						],
-						"settings":
-						{
-							"auto_name": "def actionManagerKey(key):",
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "testing.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 247,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								160,
-								160
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -771,7 +698,48 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 3,
+					"file": "actionManager.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9763,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9686,
+								9686
+							],
+							[
+								9702,
+								9702
+							]
+						],
+						"settings":
+						{
+							"auto_name": "def actionManagerKey(key):",
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 4,
 					"file": "shopManager.py",
 					"semi_transient": false,
 					"settings":
@@ -823,17 +791,19 @@
 						"settings":
 						{
 							"auto_name": "shopManager, put stuff here",
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 5,
 					"file": "questManager.py",
 					"semi_transient": false,
 					"settings":
@@ -845,8 +815,8 @@
 						"selection":
 						[
 							[
-								747,
-								771
+								1264,
+								1264
 							]
 						],
 						"settings":
@@ -859,32 +829,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 6,
 					"file": "screenManager.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3361,
+						"buffer_size": 3486,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2374,
-								2374
-							],
-							[
-								2622,
-								2622
-							],
-							[
-								2874,
-								2874
+								1522,
+								1522
 							]
 						],
 						"settings":
@@ -894,10 +856,69 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 293.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "mapManager.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8805,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5959,
+								5959
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1092.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "monsterManager.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 668,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								667,
+								667
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class Monster(level, gold):",
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -919,51 +940,25 @@
 						"selection":
 						[
 							[
-								696,
-								696
+								778,
+								778
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
 					"buffer": 10,
-					"file": "mapManager.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7878,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1567,
-								1567
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 42.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
 					"file": "tileManager.py",
 					"semi_transient": false,
 					"settings":
@@ -988,7 +983,35 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "testing.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 52,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								35,
+								35
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
@@ -1028,8 +1051,8 @@
 		"cols":
 		[
 			0.0,
-			0.265698330922,
-			0.734741311428,
+			0.296618921224,
+			0.746456457178,
 			1.0
 		],
 		"rows":

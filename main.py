@@ -16,17 +16,18 @@ def main(screen):
     screen.nodelay(True)
     screen.clear()
     screenSizeY, screenSizeX = screen.getmaxyx()
-    mapSizeX = 1000
-    mapSizeY = 1000
+    mapSizeX = 300
+    mapSizeY = 300
     inventoryPosY = mapSizeY + int(mapSizeY/10)
     descriptionBoxX = mapSizeX + int(mapSizeX/10)
     skillManagerDisplayX = descriptionBoxX
     skillManagerDisplayY = inventoryPosY
-    playerPosX = 500
-    playerPosY = 500
+    playerPosX = int(mapSizeX/2)
+    playerPosY = int(mapSizeY/2)
     ax = 0
     ay = 0
-    currentMap = mapGenerate(mapSizeX, mapSizeY)
+    monsters = []
+    currentMap, monsters = mapGenerate(mapSizeX, mapSizeY, monsters)
     modulePositions = {'map':1,'actions':2,'inventory':3,'skills':4, 'quests':5}
     inventory = ['axe', 'shovel', 'bucket']
     skills = {}
@@ -56,9 +57,10 @@ def main(screen):
         skillManagerDisplay(screen, skills, modulePositions['skills'])
         inventoryManager(inventory, screen, inventoryPosY, modulePositions['inventory'])
         questManagerDisplay(screen, activeQuests, modulePositions['quests'])
-        actionManagerDisplay(screen, modulePositions['actions'], textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY)
-        playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints = actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints)
-
+        actionManagerDisplay(screen, modulePositions['actions'], textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters)
+        playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints = actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints, monsters)
+        if playerMoved:
+            currentMap = mapEvents(currentMap, playerPosX, playerPosY, monsters)
         #playerPosX = max(0,  playerPosX)
         #playerPosX = min(screenSizeX-1, playerPosX)
         #playerPosY = max(0,  playerPosY)

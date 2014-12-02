@@ -36,6 +36,8 @@ def screenPositioner(moduleNumber, component):
             return 1, int(int(os.environ['COLS'])/2) + 3
         elif component == "body":
             return 3, int(int(os.environ['COLS'])/2) + 1
+        elif component == "bottom":
+            return int(int(os.environ['LINES'])/2-1), int(int(os.environ['COLS'])/2) + 1
     elif moduleNumber == 3:
         if component == "title":
             return int(int(os.environ['LINES'])/2+1), 3
@@ -46,6 +48,9 @@ def screenPositioner(moduleNumber, component):
             return int(int(os.environ['LINES'])/2+1), int(int(os.environ['COLS'])/2) + 3
         elif component == "body":
             return int(int(os.environ['LINES'])/2+3), int(int(os.environ['COLS'])/2) + 1
+    elif moduleNumber == 6: #weather
+        if component == "body":
+            return int(os.environ['LINES']) - 1, 1
 
 def moduleSize():
     return int(int(os.environ['COLS'])/2)-1, int(int(os.environ['LINES'])/2)-3

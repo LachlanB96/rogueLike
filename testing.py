@@ -1,4 +1,13 @@
-modulePositions = {'map':1,'actions':5,'inventory':3,'skills':4, 'quests':2}
-modulePositions[list(modulePositions.keys())[list(modulePositions.values()).index(2)]] = modulePositions['actions']
-modulePositions['actions'] = 2
-print (modulePositions)
+import random
+
+for i in range(20):
+    continants = ['q','w','r','t','y','p','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m']
+    vowel = ['a','e','i','o','u']
+    name = ""
+    for i in range(random.randint(1,2)):
+        name += continants[random.randint(1,len(continants)-1)]
+        name += vowel[random.randint(1,len(vowel)-1)]
+        if random.randint(1,2) == 1:
+            name += vowel[random.randint(1,len(vowel)-1)]
+        name += continants[random.randint(1,len(continants)-1)]
+    print (name)

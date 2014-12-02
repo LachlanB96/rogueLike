@@ -1,8 +1,9 @@
 import curses
 import random
 from screenManager import *
+from monsterManager import *
 
-def mapGenerate(mapSizeX, mapSizeY, trees=50, towns=1, shops=20, monsters=40, water=10, mountains=10, mine=10, alter=10, craftShop=20):
+def mapGenerate(mapSizeX, mapSizeY, monstersList, trees=500, towns=1000, shops=200, monsters=400, water=100, mountains=100, mine=100, alter=100, craftShop=200):
     matrix = [[0 for i in range(mapSizeY)] for i in range(mapSizeX)]
     tilePercentageCounter = 0 #used to track what percent of tiles is taken
     treeRange = range(tilePercentageCounter, trees)
@@ -25,11 +26,14 @@ def mapGenerate(mapSizeX, mapSizeY, trees=50, towns=1, shops=20, monsters=40, wa
     tilePercentageCounter += craftShop
     for i in range(mapSizeY):
         for j in range (mapSizeX):
-            tileSeed = random.randint(0, 1000)
+            tileSeed = random.randint(0, 10000)
             if tileSeed in treeRange: tileType = "tree"
             elif tileSeed in townsRange: tileType = "town"
             elif tileSeed in shopsRange: tileType = "shop"
-            elif tileSeed in monstersRange: tileType = "monster"
+            elif tileSeed in monstersRange:
+                tileType = "monster"
+                monster = Monster(j, i)
+                monstersList.append(monster)
             elif tileSeed in waterRange: tileType = "water"
             elif tileSeed in mountainRange: tileType = "mountain"
             elif tileSeed in mineRange: tileType = "mine"
@@ -39,18 +43,37 @@ def mapGenerate(mapSizeX, mapSizeY, trees=50, towns=1, shops=20, monsters=40, wa
             matrix[j][i] = tileType
     for i in range(mapSizeY):
         for j in range (mapSizeX):
-            if tileNearEdge(mapSizeX, mapSizeY, j, i) > 5:
+            size = random.randint(3,15)
+            if tileNearEdge(mapSizeX, mapSizeY, j, i) > size*2+1:
                 if matrix[j][i] == "town":
-                    matrix = townGenerate(matrix, j, i)
-    return matrix
+                    if not tileNextTo(matrix, j, i, 'townWall', size*2):
+                        matrix = townGenerate(matrix, j, i, size)
+                    else:
+                        matrix[j][i] = 'grass'
+
+    return matrix, monstersList
 
 def townGenerate(matrix, posX, posY, size=5):
-    try:
-        for i in range(-size,size):
-            matrix[posX+i][posY] = "tree"
-        return matrix
-    except IndexError:
-        i = 1 # this does nothing...
+    topLeftX = posX - size - 1
+    topLeftY = posY - 2
+    width = size * 2 + 2
+    for i in range(width):
+        for j in range(width):
+            matrix[topLeftX+i][posY+j] = "grass"
+    for i in range(-size,size):
+        matrix[posX+i][posY - 1] = "townWall"
+        matrix[posX+i][posY + size*2] = "townWall"
+        matrix[posX-size][posY+i+size] = "townWall"
+        matrix[posX+size][posY+i+size] = "townWall"
+    matrix[posX+size][posY-1] = "townWall"
+    matrix[posX+size][posY+size*2] = "townWall"
+    matrix[posX-1][posY+size*2] = "alter"
+    matrix[posX][posY+size*2] = "alter"
+    matrix[posX+1][posY+size*2] = "alter"
+    matrix[posX-1][posY+size*2+1] = "alter"
+    matrix[posX][posY+size*2+1] = "alter"
+    matrix[posX+1][posY+size*2+1] = "alter"
+    return matrix
 
 def mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, moduleNumber):
     titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
@@ -69,13 +92,13 @@ def mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, modu
 def drawMapTile(currentTile, tilePosY, tilePosX, screen):
     tileTypes = {'grass':',','seed':'.','tree':'t','town':'T','shop':'$','monster':'M','water':'W',
     'fire':'F','newFire':'f','mountain':'M','mine':'m','craftShop':'C','quest':'!','alter':'A',
-    'hole':'O','corruptSeed':'.'} 
+    'hole':'O','corruptSeed':'.','townWall':'H'} 
     tileColours = {'grass':16,'seed':3,'tree':3,'town':14,'shop':15,'monster':5,'water':2,
     'fire':13,'newFire':13,'mountain':16,'mine':7,'craftShop':4,'quest':15,'alter':2,
-    'hole':16,'corruptSeed':3}
+    'hole':16,'corruptSeed':3,'townWall':16}
     screen.addstr(tilePosY, tilePosX, tileTypes[currentTile], curses.color_pair(tileColours[currentTile]))
 
-def mapEvents(currentMap, playerPosX, playerPosY):
+def mapEvents(currentMap, playerPosX, playerPosY, monsters):
     moduleSizeX, moduleSizeY = moduleSize()
     for i in range(moduleSizeY):
         for j in range (moduleSizeX):
@@ -84,7 +107,7 @@ def mapEvents(currentMap, playerPosX, playerPosY):
             currentTile = currentMap[tilePosX][tilePosY]
             if currentTile == 'tree':
                 if tileNextTo(currentMap, tilePosX, tilePosY, 'fire'):
-                    if not tileNextTo(currentMap, tilePosX, tilePosY, 'water', "none", 2):
+                    if not tileNextTo(currentMap, tilePosX, tilePosY, 'water', 2):
                         currentMap[tilePosX][tilePosY] = 'newFire'
             elif currentTile == 'seed':
                 if random.randint(1,30) == 1:
@@ -96,56 +119,30 @@ def mapEvents(currentMap, playerPosX, playerPosY):
                 if random.randint(1,10) == 1:
                     currentMap[tilePosX][tilePosY] = 'grass'
             elif currentTile == 'monster':
-                randomMoveSeed = random.randint(-1,1)
-                if random.randint(1,2) == 1:
-                    if currentMap[tilePosX + randomMoveSeed][tilePosY] == 'grass':
-                        currentMap[tilePosX + randomMoveSeed][tilePosY] = 'monster'
-                        currentMap[tilePosX][tilePosY] = 'grass'
-                    elif currentMap[tilePosX + randomMoveSeed][tilePosY] == 'fire':
-                        currentMap[tilePosX + randomMoveSeed][tilePosY] = 'fire'
-                        currentMap[tilePosX][tilePosY] = 'grass'
-                elif random.randint(1,2) == 1:
-                    if currentMap[tilePosX][tilePosY + randomMoveSeed] == 'grass':
-                        currentMap[tilePosX][tilePosY + randomMoveSeed] = 'monster'
-                        currentMap[tilePosX][tilePosY] = 'grass'
-                    elif currentMap[tilePosX][tilePosY + randomMoveSeed] == 'fire':
-                        currentMap[tilePosX][tilePosY + randomMoveSeed] = 'fire'
-                        currentMap[tilePosX][tilePosY] = 'grass'
+                for monster in monsters:
+                    if monster.posAt(tilePosX, tilePosY):
+                        currentMap = monster.update(currentMap,tilePosX, tilePosY)
             elif currentTile == 'hole':
                 if tileNextTo(currentMap, tilePosX, tilePosY, 'water'):
                     currentMap[tilePosX][tilePosY] = 'water'
 
     return currentMap
 
-def tileNextTo(currentMap, tilePosX, tilePosY, tileToFind, direction="none", branch=1):
+def tileNextTo(currentMap, tilePosX, tilePosY, tileToFind, branch=1, direction="none"):
     try:
-        if direction == 'none':
-            if tileToFind == currentMap[tilePosX+1][tilePosY]:
-                return True
-            elif tileToFind == currentMap[tilePosX][tilePosY+1]:
-                return True
-            elif tileToFind == currentMap[tilePosX-1][tilePosY]:
-                return True
-            elif tileToFind == currentMap[tilePosX][tilePosY-1]:
-                return True
-        if direction == 'none' and branch > 1:
-            if tileNextTo(currentMap, tilePosX+1, tilePosY, tileToFind):
-                return True
-            elif tileNextTo(currentMap, tilePosX, tilePosY+1, tileToFind):
-                return True
-            elif tileNextTo(currentMap, tilePosX-1, tilePosY, tileToFind):
-                return True
-            elif tileNextTo(currentMap, tilePosX, tilePosY-1, tileToFind):
-                return True
-        if direction == 'none' and branch > 2:
-            if tileNextTo(currentMap, tilePosX+1, tilePosY, tileToFind, "none", 2):
-                return True
-            elif tileNextTo(currentMap, tilePosX, tilePosY+1, tileToFind, "none", 2):
-                return True
-            elif tileNextTo(currentMap, tilePosX-1, tilePosY, tileToFind, "none", 2):
-                return True
-            elif tileNextTo(currentMap, tilePosX, tilePosY-1, tileToFind, "none", 2):
-                return True
+        branch += 1
+        if direction == "none":
+            for i in range(branch+1):
+                for j in range(i):
+                    if currentMap[tilePosX-branch+i][tilePosY+j] == tileToFind:
+                        return True
+                    if currentMap[tilePosX-branch+i][tilePosY-j] == tileToFind:
+                        return True
+                    if currentMap[tilePosX+branch-i][tilePosY+j] == tileToFind:
+                        return True
+                    if currentMap[tilePosX+branch-i][tilePosY-j] == tileToFind:
+                        return True
+            return False
         pass
     except IndexError:
         i = 1 # this does nothing...

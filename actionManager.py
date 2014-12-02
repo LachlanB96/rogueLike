@@ -8,35 +8,39 @@ from mapManager import *
 from screenManager import *
 from questManager import *
 
-def actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints):
+def actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints, monsters):
     textToDisplay = []
     key = screen.getch()
+    playerMoved = False
+
     if key == ord('Q'):
         sys.quit()
     if key == curses.KEY_LEFT:
-        playerPosX = playerPosX - 1
-        currentMap = mapEvents(currentMap, playerPosX, playerPosY)
+        if not currentMap[playerPosX-1][playerPosY] == "townWall":
+            playerPosX = playerPosX - 1
+            playerMoved = True
     elif key == curses.KEY_RIGHT:
-        playerPosX = playerPosX + 1
-        currentMap = mapEvents(currentMap, playerPosX, playerPosY)
+        if not currentMap[playerPosX+1][playerPosY] == "townWall":
+            playerPosX = playerPosX + 1
+            playerMoved = True
     elif key == curses.KEY_UP:
-        playerPosY = playerPosY - 1
-        currentMap = mapEvents(currentMap, playerPosX, playerPosY)
+        if not currentMap[playerPosX][playerPosY-1] == "townWall":
+            playerPosY = playerPosY - 1
+            playerMoved = True
     elif key == curses.KEY_DOWN:
-        playerPosY = playerPosY + 1
-        currentMap = mapEvents(currentMap, playerPosX, playerPosY)
+        if not currentMap[playerPosX][playerPosY+1] == "townWall":
+            playerPosY = playerPosY + 1
+            playerMoved = True
 
     elif key == ord('1') or key == ord('2') or key == ord('3') or key == ord('4'):
         modulePositions = moduleReposition(key, modulePositions, screen)
 
     elif key == ord('w'):
-        currentMap = mapEvents(currentMap, playerPosX, playerPosY)
-
-
+        playerMoved = True
 
     if currentMap[playerPosX][playerPosY] == "grass":
         if itemPresentInInventory("seeds", inventory):
-            if tileNextTo(currentMap, playerPosX, playerPosY, 'water', "none", 3):
+            if tileNextTo(currentMap, playerPosX, playerPosY, 'water', 3):
                 textToDisplay.append(("Press 'p' to plant seed" , 16))
                 if key == ord('p'):
                     currentMap[playerPosX][playerPosY] = "seed"
@@ -173,18 +177,23 @@ def actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, scre
                     inventory.append("arrows")
 
 
-    return playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints
+    return playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoved
 
-def actionManagerDisplay(screen, moduleNumber, textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY):
+def actionManagerDisplay(screen, moduleNumber, textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters):
     if not moduleNumber == 5:
         titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
         bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
+        bottomPosY, bottomPosX = screenPositioner(moduleNumber, "bottom")
         screen.addstr(titlePosY, titlePosX, 'ACTIONS', curses.color_pair(13))
         description = currentMap[playerPosX][playerPosY]
         screen.addstr(bodyPosY, bodyPosX, ("(" + str(mapSizeX) + ", " + str(mapSizeY) + ")"))
         screen.addstr(bodyPosY + 1, bodyPosX, ("(" + str(playerPosX) + ", " + str(playerPosY) + ")"))
+        if description == "monster":
+            for monster in monsters:
+                if monster.posAt(playerPosX, playerPosY):
+                    description = monster.description()
         screen.addstr(bodyPosY + 2, bodyPosX, (description))
         i = 0
         for line in textToDisplay:
-            screen.addstr(bodyPosY + 3 + i, bodyPosX, line[0], curses.color_pair(line[1]))
+            screen.addstr(bottomPosY - i, bottomPosX, line[0], curses.color_pair(line[1]))
             i += 1
