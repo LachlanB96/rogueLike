@@ -8,35 +8,27 @@ from mapManager import *
 from screenManager import *
 from questManager import *
 
-def actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints, monsters):
+def actionManagerKey(currentMap, playerPosX, playerPosY, inventory, skills, screen, activeQuests, modulePositions, textToDisplay, prayerPoints):
     textToDisplay = []
     key = screen.getch()
-    playerMoved = False
+    playerMoveDirection = ('x','y')
 
     if key == ord('Q'):
         sys.quit()
+
     if key == curses.KEY_LEFT:
-        if not currentMap[playerPosX-1][playerPosY] == "townWall":
-            playerPosX = playerPosX - 1
-            playerMoved = True
+        playerMoveDirection = (-1,0)
     elif key == curses.KEY_RIGHT:
-        if not currentMap[playerPosX+1][playerPosY] == "townWall":
-            playerPosX = playerPosX + 1
-            playerMoved = True
+        playerMoveDirection = (1,0)
     elif key == curses.KEY_UP:
-        if not currentMap[playerPosX][playerPosY-1] == "townWall":
-            playerPosY = playerPosY - 1
-            playerMoved = True
+        playerMoveDirection = (0,-1)
     elif key == curses.KEY_DOWN:
-        if not currentMap[playerPosX][playerPosY+1] == "townWall":
-            playerPosY = playerPosY + 1
-            playerMoved = True
+        playerMoveDirection = (0,1)
+    elif key == ord('w'):
+        playerMoveDirection = (0,0)
 
     elif key == ord('1') or key == ord('2') or key == ord('3') or key == ord('4'):
         modulePositions = moduleReposition(key, modulePositions, screen)
-
-    elif key == ord('w'):
-        playerMoved = True
 
     if currentMap[playerPosX][playerPosY] == "grass":
         if itemPresentInInventory("seeds", inventory):
@@ -122,8 +114,7 @@ def actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, scre
         textToDisplay.append(("Press 'd' to defend against monster", 3))
         textToDisplay.append(("Press 'h' to hide from monster", 3))
         if key == ord('a'):
-            if random.randint(1, 15) == 1:
-                    inventory.append("corrupt dust")
+            
             inventory.append("gold")
             currentMap[playerPosX][playerPosY] = "grass"
             skills = skillManagerExperience(skills, 'attack', 10)
@@ -177,7 +168,7 @@ def actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, scre
                     inventory.append("arrows")
 
 
-    return playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoved
+    return currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoveDirection
 
 def actionManagerDisplay(screen, moduleNumber, textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters):
     if not moduleNumber == 5:
@@ -197,3 +188,10 @@ def actionManagerDisplay(screen, moduleNumber, textToDisplay, currentMap, mapSiz
         for line in textToDisplay:
             screen.addstr(bottomPosY - i, bottomPosX, line[0], curses.color_pair(line[1]))
             i += 1
+
+def playerMovementManager(currentMap, playerPosX, playerPosY, playerMoveDirection):
+    if not currentMap[playerPosX+playerMoveDirection[0]][playerPosY+playerMoveDirection[1]] == "townWall":
+            playerPosX += playerMoveDirection[0]
+            playerPosY += playerMoveDirection[1]
+            playerMoved = True
+    return playerPosX, playerPosY

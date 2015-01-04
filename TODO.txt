@@ -1,4 +1,7 @@
 TODO:
+
+I WAS MAKING THE SPREADSHEET WORK IN STAT MANAGER BEFORE I HAD TO SLEEP
+
 - Add day night cycles
 - Add more depth to monsters
     - Train

@@ -11,6 +11,7 @@ class Monster():
         self.level = random.randint(1,10)
         self.name = ""
         self.bodyPart = ""
+        self.health = 250
         for i in range(random.randint(1,2)):
             self.name += continants[random.randint(1,len(continants)-1)]
             self.name += vowel[random.randint(0,len(vowel)-1)]
@@ -48,4 +49,4 @@ class Monster():
         return currentMap
 
     def description(self):
-        return self.name + " has " + self.bodyPart + " and is level " + str(self.level)
+        return self.name + " has " + self.bodyPart + " and is level " + str(self.level) + str(self.health)

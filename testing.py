@@ -1,13 +1,18 @@
-import random
+import xlrd
 
-for i in range(20):
-    continants = ['q','w','r','t','y','p','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m']
-    vowel = ['a','e','i','o','u']
-    name = ""
-    for i in range(random.randint(1,2)):
-        name += continants[random.randint(1,len(continants)-1)]
-        name += vowel[random.randint(1,len(vowel)-1)]
-        if random.randint(1,2) == 1:
-            name += vowel[random.randint(1,len(vowel)-1)]
-        name += continants[random.randint(1,len(continants)-1)]
-    print (name)
+workbook = xlrd.open_workbook('itemDescriptions.xlsx')
+worksheet = workbook.sheet_by_name('Sheet1')
+num_rows = worksheet.nrows - 1
+num_cells = worksheet.ncols - 1
+curr_row = -1
+while curr_row < num_rows:
+    curr_row += 1
+    row = worksheet.row(curr_row)
+    print ('Row:', curr_row)
+    curr_cell = -1
+    while curr_cell < num_cells:
+        curr_cell += 1
+        # Cell Types: 0=Empty, 1=Text, 2=Number, 3=Date, 4=Boolean, 5=Error, 6=Blank
+        cell_type = worksheet.cell_type(curr_row, curr_cell)
+        cell_value = worksheet.cell_value(curr_row, curr_cell)
+        print (' ', cell_type, ':', cell_value)

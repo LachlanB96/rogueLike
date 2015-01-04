@@ -1,11 +1,13 @@
 import curses
 import random
+import gspread
 from inventoryManager import *
 from mapManager import *
 from actionManager import *
 from skillManager import *
 from screenManager import *
 from questManager import *
+from statManager import *
 
 def main(screen):
     curses.start_color()
@@ -28,10 +30,11 @@ def main(screen):
     ay = 0
     monsters = []
     currentMap, monsters = mapGenerate(mapSizeX, mapSizeY, monsters)
-    modulePositions = {'map':1,'actions':2,'inventory':3,'skills':4, 'quests':5}
+    modulePositions = {'map':1,'actions':2,'inventory':3,'skills':5, 'quests':5, 'stats':4}
     inventory = ['axe', 'shovel', 'bucket']
     skills = {}
     prayerPoints = 0
+    playerMoveDirection = ('x','y')
     #quest tuple is (<townCoord>,<questCoord>,<questType>,<rewardType>,<reward>)
     activeQuests = []
     shop = {'logs':2}
@@ -48,6 +51,8 @@ def main(screen):
         'quest':(("Press 'e' to complete quest"), 15), 
         'alter':(("Press 'p' to pray"), 2),
         }
+    # Stats are in order, health, mana, attack, defense, speed, left wield, right wield, head, neck, torso, left arm, right arm, legs, feet, pet
+    playerStats = [100, 100, 100, 100, 10, 1, 1, 11, 1, 12, 1, 1, 35, 14, 20]
     textToDisplay = [("Test",13),("another test!",5)]
 
     while True:
@@ -57,9 +62,11 @@ def main(screen):
         skillManagerDisplay(screen, skills, modulePositions['skills'])
         inventoryManager(inventory, screen, inventoryPosY, modulePositions['inventory'])
         questManagerDisplay(screen, activeQuests, modulePositions['quests'])
+        statManagerDisplay(screen, modulePositions['stats'], playerStats)
         actionManagerDisplay(screen, modulePositions['actions'], textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters)
-        playerPosX, playerPosY, currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints = actionManagerKey(playerPosX, playerPosY, currentMap, inventory, skills, screen, actionDescriptions, mapSizeX, mapSizeY, activeQuests, modulePositions, textToDisplay, prayerPoints, monsters)
-        if playerMoved:
+        currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoveDirection = actionManagerKey(currentMap, playerPosX, playerPosY, inventory, skills, screen, activeQuests, modulePositions, textToDisplay, prayerPoints)
+        if not playerMoveDirection[0] == 'x' and not playerMoveDirection[1] == 'y':
+            playerPosX, playerPosY = playerMovementManager(currentMap, playerPosX, playerPosY, playerMoveDirection)
             currentMap = mapEvents(currentMap, playerPosX, playerPosY, monsters)
         #playerPosX = max(0,  playerPosX)
         #playerPosX = min(screenSizeX-1, playerPosX)
