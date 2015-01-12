@@ -54,6 +54,7 @@ def main(screen):
     # Stats are in order, health, mana, attack, defense, speed, left wield, right wield, head, neck, torso, left arm, right arm, legs, feet, pet
     playerStats = [100, 100, 100, 100, 10, 1, 1, 11, 1, 12, 1, 1, 35, 14, 20]
     textToDisplay = [("Test",13),("another test!",5)]
+    armourUpdated = True
 
     while True:
         screen.clear()
@@ -62,12 +63,14 @@ def main(screen):
         skillManagerDisplay(screen, skills, modulePositions['skills'])
         inventoryManager(inventory, screen, inventoryPosY, modulePositions['inventory'])
         questManagerDisplay(screen, activeQuests, modulePositions['quests'])
-        statManagerDisplay(screen, modulePositions['stats'], playerStats)
+        statManagerDisplay(screen, modulePositions['stats'], playerStats, armourUpdated)
         actionManagerDisplay(screen, modulePositions['actions'], textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters)
         currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoveDirection = actionManagerKey(currentMap, playerPosX, playerPosY, inventory, skills, screen, activeQuests, modulePositions, textToDisplay, prayerPoints)
         if not playerMoveDirection[0] == 'x' and not playerMoveDirection[1] == 'y':
             playerPosX, playerPosY = playerMovementManager(currentMap, playerPosX, playerPosY, playerMoveDirection)
             currentMap = mapEvents(currentMap, playerPosX, playerPosY, monsters)
+
+        armourUpdated = False #this is just for optimaiation so the spreadsheet isn't queried a billion times a second
         #playerPosX = max(0,  playerPosX)
         #playerPosX = min(screenSizeX-1, playerPosX)
         #playerPosY = max(0,  playerPosY)

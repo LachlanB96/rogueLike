@@ -1,18 +1,20 @@
 import xlrd
 
 workbook = xlrd.open_workbook('itemDescriptions.xlsx')
-worksheet = workbook.sheet_by_name('Sheet1')
+worksheet = workbook.sheet_by_name('Stats')
 num_rows = worksheet.nrows - 1
 num_cells = worksheet.ncols - 1
-curr_row = -1
+curr_row = 1
+ID = int(input("What item ID? >>> "))
+queryType = input("What item details do you want? (name, stats, rarity) >>> ")
 while curr_row < num_rows:
+    if worksheet.cell_value(curr_row, 0) == ID:
+        if queryType == 'name':
+            print (worksheet.cell_value(curr_row, 1), worksheet.cell_value(curr_row, 2))
+        elif queryType == "stats":
+            print ("A: ", worksheet.cell_value(curr_row, 4), ". D: ", worksheet.cell_value(curr_row, 5), ". S: ", worksheet.cell_value(curr_row, 6))
+        elif queryType == "rarity":
+            print ("Rareness: ", worksheet.cell_value(curr_row, 3))
+        else:
+            print ("Make sure you select a proper option. Don't use any capitals!")
     curr_row += 1
-    row = worksheet.row(curr_row)
-    print ('Row:', curr_row)
-    curr_cell = -1
-    while curr_cell < num_cells:
-        curr_cell += 1
-        # Cell Types: 0=Empty, 1=Text, 2=Number, 3=Date, 4=Boolean, 5=Error, 6=Blank
-        cell_type = worksheet.cell_type(curr_row, curr_cell)
-        cell_value = worksheet.cell_value(curr_row, curr_cell)
-        print (' ', cell_type, ':', cell_value)
