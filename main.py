@@ -28,8 +28,7 @@ def main(screen):
     playerPosY = int(mapSizeY/2)
     ax = 0
     ay = 0
-    monsters = []
-    currentMap, monsters = mapGenerate(mapSizeX, mapSizeY, monsters)
+    currentMap, monsters, towns = mapGenerate(mapSizeX, mapSizeY)
     modulePositions = {'map':1,'actions':2,'inventory':3,'skills':5, 'quests':5, 'stats':4}
     inventory = ['axe', 'shovel', 'bucket']
     skills = {}

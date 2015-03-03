@@ -2,8 +2,11 @@ import curses
 import random
 from screenManager import *
 from monsterManager import *
+from townManager import *
 
-def mapGenerate(mapSizeX, mapSizeY, monstersList, trees=500, towns=1000, shops=200, monsters=400, water=100, mountains=100, mine=100, alter=100, craftShop=200):
+def mapGenerate(mapSizeX, mapSizeY, trees=500, towns=1000, shops=200, monsters=400, water=100, mountains=100, mine=100, alter=100, craftShop=200):
+    monstersList = []
+    townsList = []
     matrix = [[0 for i in range(mapSizeY)] for i in range(mapSizeX)]
     tilePercentageCounter = 0 #used to track what percent of tiles is taken
     treeRange = range(tilePercentageCounter, trees)
@@ -47,33 +50,11 @@ def mapGenerate(mapSizeX, mapSizeY, monstersList, trees=500, towns=1000, shops=2
             if tileNearEdge(mapSizeX, mapSizeY, j, i) > size*2+1:
                 if matrix[j][i] == "town":
                     if not tileNextTo(matrix, j, i, 'townWall', size*2):
-                        matrix = townGenerate(matrix, j, i, size)
+                        matrix, townsList = townGenerate(matrix, j, i, size, townsList)
                     else:
                         matrix[j][i] = 'grass'
 
-    return matrix, monstersList
-
-def townGenerate(matrix, posX, posY, size=5):
-    topLeftX = posX - size - 1
-    topLeftY = posY - 2
-    width = size * 2 + 2
-    for i in range(width):
-        for j in range(width):
-            matrix[topLeftX+i][posY+j] = "grass"
-    for i in range(-size,size):
-        matrix[posX+i][posY - 1] = "townWall"
-        matrix[posX+i][posY + size*2] = "townWall"
-        matrix[posX-size][posY+i+size] = "townWall"
-        matrix[posX+size][posY+i+size] = "townWall"
-    matrix[posX+size][posY-1] = "townWall"
-    matrix[posX+size][posY+size*2] = "townWall"
-    matrix[posX-1][posY+size*2] = "alter"
-    matrix[posX][posY+size*2] = "alter"
-    matrix[posX+1][posY+size*2] = "alter"
-    matrix[posX-1][posY+size*2+1] = "alter"
-    matrix[posX][posY+size*2+1] = "alter"
-    matrix[posX+1][posY+size*2+1] = "alter"
-    return matrix
+    return matrix, monstersList, townList
 
 def mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, moduleNumber):
     titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
