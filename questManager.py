@@ -4,7 +4,7 @@ from screenManager import *
 
 
 def questManagerDisplay(screen, activeQuests, moduleNumber):
-    if not moduleNumber == 5:
+    if not moduleNumber > 7:
         titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
         bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
         screen.addstr(titlePosY, titlePosX, 'QUESTS', curses.color_pair(13))

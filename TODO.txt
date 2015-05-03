@@ -9,12 +9,10 @@ I WAS MAKING THE SPREADSHEET WORK IN STAT MANAGER BEFORE I HAD TO SLEEP
     - Flee
     - Attack
     - Defend
-- Add Rivers
-- Add Ruins
-- Add caves
+
 - Add potions
 - Fix actionManager class, it handles too much
-- Add deserts
+
 - Add armour and armour manager (swords too!)
 - Add health and mana to actions tab?
 - Add intellegent other players
@@ -23,3 +21,9 @@ I WAS MAKING THE SPREADSHEET WORK IN STAT MANAGER BEFORE I HAD TO SLEEP
 - Clean up UI so more user friendly
 - Add bandit camps
 - Add more biomes
+    - Add Rivers
+    - Add Ruins
+    - Add caves
+    - Add deserts
+
+- ADD A COOL LOOKING TOWN SCREEN THAT UPDATES AND STUFF WITH WEALTH AND STUFF

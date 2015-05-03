@@ -4,7 +4,7 @@ from screenManager import *
 from monsterManager import *
 from townManager import *
 
-def mapGenerate(mapSizeX, mapSizeY, trees=500, towns=1000, shops=200, monsters=400, water=100, mountains=100, mine=100, alter=100, craftShop=200):
+def mapGenerate(mapSizeX, mapSizeY, trees=500, towns=50, shops=200, monsters=400, water=100, mountains=100, mine=100, alter=100, craftShop=200):
     monstersList = []
     townsList = []
     matrix = [[0 for i in range(mapSizeY)] for i in range(mapSizeX)]
@@ -54,7 +54,7 @@ def mapGenerate(mapSizeX, mapSizeY, trees=500, towns=1000, shops=200, monsters=4
                     else:
                         matrix[j][i] = 'grass'
 
-    return matrix, monstersList, townList
+    return matrix, monstersList, townsList
 
 def mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, moduleNumber):
     titlePosY, titlePosX = screenPositioner(moduleNumber, "title")

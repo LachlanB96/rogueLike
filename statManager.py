@@ -3,7 +3,7 @@ from screenManager import *
 import xlrd
 
 def statManagerDisplay(screen, moduleNumber, playerStats, armourUpdated):
-    if not moduleNumber == 5:
+    if not moduleNumber > 7:
         titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
         bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
         screen.addstr(titlePosY, titlePosX, 'STATS', curses.color_pair(13))

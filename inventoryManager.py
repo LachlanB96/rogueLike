@@ -2,7 +2,7 @@ import curses
 from screenManager import *
 
 def inventoryManager(inventory, screen, inventoryPosY, moduleNumber):
-    if not moduleNumber == 5:
+    if not moduleNumber > 7:
         titlePosY, titlePosX = screenPositioner(moduleNumber, "title")
         bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
         screen.addstr(titlePosY, titlePosX, 'INVENTORY', curses.color_pair(13))

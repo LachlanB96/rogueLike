@@ -18,3 +18,4 @@ while curr_row < num_rows:
         else:
             print ("Make sure you select a proper option. Don't use any capitals!")
     curr_row += 1
+    

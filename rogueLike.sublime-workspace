@@ -327,14 +327,7 @@
 			"file": "main.py",
 			"settings":
 			{
-				"buffer_size": 3741,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"settings":
-			{
-				"buffer_size": 0,
+				"buffer_size": 3837,
 				"line_ending": "Windows"
 			}
 		},
@@ -348,11 +341,12 @@
 			}
 		},
 		{
-			"file": "testing.py",
+			"file": "shopManager.py",
 			"settings":
 			{
-				"buffer_size": 904,
-				"line_ending": "Windows"
+				"buffer_size": 6520,
+				"line_ending": "Windows",
+				"name": "shopManager, put stuff here"
 			}
 		},
 		{
@@ -362,15 +356,6 @@
 				"buffer_size": 2548,
 				"line_ending": "Windows",
 				"name": "class Monster(level, gold):"
-			}
-		},
-		{
-			"file": "shopManager.py",
-			"settings":
-			{
-				"buffer_size": 6520,
-				"line_ending": "Windows",
-				"name": "shopManager, put stuff here"
 			}
 		},
 		{
@@ -385,16 +370,16 @@
 			"file": "actionManager.py",
 			"settings":
 			{
-				"buffer_size": 9628,
+				"buffer_size": 9679,
 				"line_ending": "Windows",
 				"name": "def actionManagerKey(key):"
 			}
 		},
 		{
-			"file": "statManager.py",
+			"file": "helpManager.py",
 			"settings":
 			{
-				"buffer_size": 3131,
+				"buffer_size": 1282,
 				"line_ending": "Windows"
 			}
 		},
@@ -402,7 +387,7 @@
 			"file": "screenManager.py",
 			"settings":
 			{
-				"buffer_size": 3606,
+				"buffer_size": 5078,
 				"line_ending": "Windows"
 			}
 		},
@@ -410,18 +395,15 @@
 			"file": "mapManager.py",
 			"settings":
 			{
-				"buffer_size": 7340,
+				"buffer_size": 7339,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "def townGenerate(matrix, posX, posY, size, townList):\n    topLeftX = posX - size - 1\n    topLeftY = posY - 2\n    town = Town((topLeftX, topLeftY), (topLeftX + size*2, topLeftY + size*2), matrix)\n    matrix = town.generate()\n    townList.append(town)\n    return matrix, townList\n\nclass Town():\n    def __init__(self, topLeft, bottomRight, matrix):\n        topLeftX, topLeftY = topLeft\n        bottomRightX, bottomRightY = bottomRight\n        size = topLeftX - bottomRightX\n        width = size * 2 + 2\n\n    def generate(self):\n        for i in range(width):\n            for j in range(width):\n                matrix[topLeftX+i][posY+j] = \"grass\"\n        for i in range(-size,size):\n            matrix[posX+i][posY - 1] = \"townWall\"\n            matrix[posX+i][posY + size*2] = \"townWall\"\n            matrix[posX-size][posY+i+size] = \"townWall\"\n            matrix[posX+size][posY+i+size] = \"townWall\"\n        matrix[posX+size][posY-1] = \"townWall\"\n        matrix[posX+size][posY+size*2] = \"townWall\"\n        matrix[posX-1][posY+size*2] = \"alter\"\n        matrix[posX][posY+size*2] = \"alter\"\n        matrix[posX+1][posY+size*2] = \"alter\"\n        matrix[posX-1][posY+size*2+1] = \"alter\"\n        matrix[posX][posY+size*2+1] = \"alter\"\n        matrix[posX+1][posY+size*2+1] = \"alter\"\n        return matrix",
 			"file": "townManager.py",
-			"file_size": 1271,
-			"file_write_time": 130665851121522188,
 			"settings":
 			{
-				"buffer_size": 1296,
+				"buffer_size": 2962,
 				"line_ending": "Windows"
 			}
 		},
@@ -429,7 +411,7 @@
 			"file": "TODO.txt",
 			"settings":
 			{
-				"buffer_size": 572,
+				"buffer_size": 669,
 				"line_ending": "Windows",
 				"name": "TODO:"
 			}
@@ -450,12 +432,36 @@
 				"line_ending": "Windows",
 				"name": "class Town(posX, posY):"
 			}
+		},
+		{
+			"contents": "import xlrd\n\nworkbook = xlrd.open_workbook('itemDescriptions.xlsx')\nworksheet = workbook.sheet_by_name('Stats')\nnum_rows = worksheet.nrows - 1\nnum_cells = worksheet.ncols - 1\ncurr_row = 1\nID = int(input(\"What item ID? >>> \"))\nqueryType = input(\"What item details do you want? (name, stats, rarity) >>> \")\nwhile curr_row < num_rows:\n    if worksheet.cell_value(curr_row, 0) == ID:\n        if queryType == 'name':\n            print (worksheet.cell_value(curr_row, 1), worksheet.cell_value(curr_row, 2))\n        elif queryType == \"stats\":\n            print (\"A: \", worksheet.cell_value(curr_row, 4), \". D: \", worksheet.cell_value(curr_row, 5), \". S: \", worksheet.cell_value(curr_row, 6))\n        elif queryType == \"rarity\":\n            print (\"Rareness: \", worksheet.cell_value(curr_row, 3))\n        else:\n            print (\"Make sure you select a proper option. Don't use any capitals!\")\n    curr_row += 1\n    ",
+			"file": "testing.py",
+			"file_size": 923,
+			"file_write_time": 130649200802078443,
+			"settings":
+			{
+				"buffer_size": 909,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "statManager.py",
+			"settings":
+			{
+				"buffer_size": 3131,
+				"line_ending": "Windows"
+			}
 		}
 	],
 	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 127.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -505,6 +511,7 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Lachlan/Documents/Uni/websystems/Assignment 1/fun.html",
 		"/C/Python34/Lib/site-packages/wifileds/limitlessled/__init__.py",
 		"/C/Python34/Lib/site-packages/wifileds/limitlessled/effects/strobe.py",
 		"/C/Python34/Lib/site-packages/wifileds/__init__.py",
@@ -584,6 +591,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"TEMP",
+			"termSizeY",
+			"termSizeX",
+			"size",
 			"monster",
 			"random",
 			"update",
@@ -632,6 +643,10 @@
 		"regex": false,
 		"replace_history":
 		[
+			"termSizeY",
+			"termSizeX",
+			"TEMP",
+			"self.size",
 			"alter",
 			"bodyPosX",
 			"map",
@@ -648,7 +663,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -657,15 +672,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3741,
+						"buffer_size": 3837,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1435,
-								1435
+								665,
+								665
 							]
 						],
 						"settings":
@@ -675,41 +690,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3.0,
+						"translation.y": 126.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "skillManager.py",
 					"semi_transient": false,
 					"settings":
@@ -721,8 +709,8 @@
 						"selection":
 						[
 							[
-								0,
-								1548
+								126,
+								126
 							]
 						],
 						"settings":
@@ -736,78 +724,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "testing.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 904,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								187,
-								13
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "monsterManager.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2548,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1938,
-								1938
-							]
-						],
-						"settings":
-						{
-							"auto_name": "class Monster(level, gold):",
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 712.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 3,
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 6,
-			"sheets":
-			[
+				},
 				{
-					"buffer": 5,
+					"buffer": 2,
 					"file": "shopManager.py",
 					"semi_transient": false,
 					"settings":
@@ -863,15 +784,52 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": -0.0,
-						"translation.y": 210.0,
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 3,
+					"file": "monsterManager.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2548,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1938,
+								1938
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class Monster(level, gold):",
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 4,
 					"file": "questManager.py",
 					"semi_transient": false,
 					"settings":
@@ -883,69 +841,8 @@
 						"selection":
 						[
 							[
-								1264,
-								1264
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "actionManager.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9628,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1649,
-								1649
-							]
-						],
-						"settings":
-						{
-							"auto_name": "def actionManagerKey(key):",
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "statManager.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3131,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1927,
-								1927
+								147,
+								147
 							]
 						],
 						"settings":
@@ -962,54 +859,25 @@
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "screenManager.py",
+					"buffer": 5,
+					"file": "actionManager.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3606,
+						"buffer_size": 9679,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1494,
-								1494
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "mapManager.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7340,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								368,
-								368
-							]
-						],
-						"settings":
-						{
+							"auto_name": "def actionManagerKey(key):",
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -1022,20 +890,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "townManager.py",
+					"buffer": 6,
+					"file": "helpManager.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1296,
+						"buffer_size": 1282,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1296,
-								1296
+								117,
+								117
 							]
 						],
 						"settings":
@@ -1048,24 +916,114 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "TODO.txt",
+					"buffer": 7,
+					"file": "screenManager.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 572,
+						"buffer_size": 5078,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								78,
-								78
+								3172,
+								3172
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 714.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "mapManager.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7339,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3524,
+								3535
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 672.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "townManager.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2962,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								117,
+								117
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "TODO.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 669,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								590,
+								590
 							]
 						],
 						"settings":
@@ -1077,11 +1035,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 11,
 					"file": "inventoryManager.py",
 					"semi_transient": false,
 					"settings":
@@ -1093,8 +1051,8 @@
 						"selection":
 						[
 							[
-								778,
-								778
+								141,
+								141
 							]
 						],
 						"settings":
@@ -1107,11 +1065,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 12,
 					"file": "tileManager.py",
 					"semi_transient": false,
 					"settings":
@@ -1140,6 +1098,78 @@
 					"type": "text"
 				}
 			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 13,
+					"file": "testing.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 909,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								909,
+								909
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 14,
+					"file": "statManager.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3131,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								157,
+								157
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
 		}
 	],
 	"incremental_find":
@@ -1165,12 +1195,26 @@
 				0,
 				2,
 				1
+			],
+			[
+				2,
+				0,
+				3,
+				1
+			],
+			[
+				3,
+				0,
+				4,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.25,
 			0.5,
+			0.75,
 			1.0
 		],
 		"rows":
@@ -1216,6 +1260,7 @@
 	{
 		"height": 100.0
 	},
+	"pinned_build_system": "",
 	"project": "rogueLike.sublime-project",
 	"replace":
 	{
@@ -1225,6 +1270,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -1233,6 +1279,7 @@
 	"select_project":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -1241,12 +1288,13 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 2,
 	"settings":
 	{
 	},

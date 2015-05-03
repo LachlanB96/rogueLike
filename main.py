@@ -8,6 +8,7 @@ from skillManager import *
 from screenManager import *
 from questManager import *
 from statManager import *
+from helpManager import *
 
 def main(screen):
     curses.start_color()
@@ -29,7 +30,7 @@ def main(screen):
     ax = 0
     ay = 0
     currentMap, monsters, towns = mapGenerate(mapSizeX, mapSizeY)
-    modulePositions = {'map':1,'actions':2,'inventory':3,'skills':5, 'quests':5, 'stats':4}
+    modulePositions = ['map','actions','inventory','skills', 'quests', 'stats', 'help', 'debug']
     inventory = ['axe', 'shovel', 'bucket']
     skills = {}
     prayerPoints = 0
@@ -58,12 +59,13 @@ def main(screen):
     while True:
         screen.clear()
         screenBorders(screen)
-        mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, modulePositions['map'])
-        skillManagerDisplay(screen, skills, modulePositions['skills'])
-        inventoryManager(inventory, screen, inventoryPosY, modulePositions['inventory'])
-        questManagerDisplay(screen, activeQuests, modulePositions['quests'])
-        statManagerDisplay(screen, modulePositions['stats'], playerStats, armourUpdated)
-        actionManagerDisplay(screen, modulePositions['actions'], textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters)
+        helpManagerDisplay(screen, modulePositions.index('help'))
+        mapDraw(screen, currentMap, playerPosX, playerPosY, mapSizeX, mapSizeY, modulePositions.index('map'))
+        skillManagerDisplay(screen, skills, modulePositions.index('skills'))
+        inventoryManager(inventory, screen, inventoryPosY, modulePositions.index('inventory'))
+        questManagerDisplay(screen, activeQuests, modulePositions.index('quests'))
+        statManagerDisplay(screen, modulePositions.index('stats'), playerStats, armourUpdated)
+        actionManagerDisplay(screen, modulePositions.index('actions'), textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters)
         currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoveDirection = actionManagerKey(currentMap, playerPosX, playerPosY, inventory, skills, screen, activeQuests, modulePositions, textToDisplay, prayerPoints)
         if not playerMoveDirection[0] == 'x' and not playerMoveDirection[1] == 'y':
             playerPosX, playerPosY = playerMovementManager(currentMap, playerPosX, playerPosY, playerMoveDirection)
