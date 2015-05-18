@@ -49,4 +49,4 @@ class Monster():
         return currentMap
 
     def description(self):
-        return self.name + " has " + self.bodyPart + " and is level " + str(self.level) + str(self.health)
+        return self.name + " has (a) " + self.bodyPart + " and is level " + str(self.level) + " with " + str(self.health) + " health."

@@ -8,7 +8,6 @@ def screenSetup():
     os.environ['LINES'] = termSizeY
     os.environ['COLS'] = termSizeX
 
-
 def screenBorders(screen):
     termSizeY = int(os.environ['LINES'])
     termSizeX = int(os.environ['COLS'])

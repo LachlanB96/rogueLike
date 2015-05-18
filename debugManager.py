@@ -7,5 +7,5 @@ def debugManagerDisplay(screen, moduleNumber, debugLog):
         bodyPosY, bodyPosX = screenPositioner(moduleNumber, "body")
         screen.addstr(titlePosY, titlePosX, 'DEBUG', curses.color_pair(13))
         for line in debugLog:
-            screen.addstr(bodyPosY + i, bodyPosX, (line)
+            screen.addstr(bodyPosY + i, bodyPosX, (line))
             i += 1

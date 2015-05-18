@@ -9,6 +9,7 @@ from screenManager import *
 from questManager import *
 from statManager import *
 from helpManager import *
+from debugManager import *
 
 def main(screen):
     curses.start_color()
@@ -57,6 +58,7 @@ def main(screen):
     armourUpdated = True
 
     while True:
+        keyPressed = keyboardManager(screen)
         screen.clear()
         screenBorders(screen)
         helpManagerDisplay(screen, modulePositions.index('help'))
@@ -66,16 +68,13 @@ def main(screen):
         questManagerDisplay(screen, activeQuests, modulePositions.index('quests'))
         statManagerDisplay(screen, modulePositions.index('stats'), playerStats, armourUpdated)
         actionManagerDisplay(screen, modulePositions.index('actions'), textToDisplay, currentMap, mapSizeX, mapSizeY, playerPosX, playerPosY, monsters)
-        currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoveDirection = actionManagerKey(currentMap, playerPosX, playerPosY, inventory, skills, screen, activeQuests, modulePositions, textToDisplay, prayerPoints)
+        currentMap, inventory, skills, activeQuests, modulePositions, textToDisplay, prayerPoints, playerMoveDirection = actionManagerKey(currentMap, playerPosX, playerPosY, inventory, skills, screen, activeQuests, modulePositions, textToDisplay, prayerPoints, keyPressed)
         if not playerMoveDirection[0] == 'x' and not playerMoveDirection[1] == 'y':
             playerPosX, playerPosY = playerMovementManager(currentMap, playerPosX, playerPosY, playerMoveDirection)
             currentMap = mapEvents(currentMap, playerPosX, playerPosY, monsters)
 
-        armourUpdated = False #this is just for optimaiation so the spreadsheet isn't queried a billion times a second
-        #playerPosX = max(0,  playerPosX)
-        #playerPosX = min(screenSizeX-1, playerPosX)
-        #playerPosY = max(0,  playerPosY)
-        #playerPosY = min(screenSizeY-1, playerPosY)
+        armourUpdated = False
+        #debugManagerDisplay(screen, modulePositions.index('debug'))
 
 
 if __name__ == '__main__':
