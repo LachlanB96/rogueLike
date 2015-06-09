@@ -11,6 +11,8 @@ from statManager import *
 from helpManager import *
 from debugManager import *
 
+#test
+
 def main(screen):
     curses.start_color()
     curses.use_default_colors()
